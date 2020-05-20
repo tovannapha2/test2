@@ -1,22 +1,53 @@
 PODS:
+  - connectivity (0.0.1):
+    - Flutter
+    - Reachability
+  - connectivity_macos (0.0.1):
+    - Flutter
   - Flutter (1.0.0)
+  - path_provider (0.0.1):
+    - Flutter
+  - path_provider_macos (0.0.1):
+    - Flutter
+  - Reachability (3.2)
   - shared_preferences (0.0.1):
     - Flutter
 
 DEPENDENCIES:
+  - connectivity (from `Pods/.symlinks/plugins/connectivity/ios`)
+  - connectivity_macos (from `Pods/.symlinks/plugins/connectivity_macos/ios`)
   - Flutter (from `Pods/.symlinks/flutter/ios`)
+  - path_provider (from `Pods/.symlinks/plugins/path_provider/ios`)
+  - path_provider_macos (from `Pods/.symlinks/plugins/path_provider_macos/ios`)
   - shared_preferences (from `Pods/.symlinks/plugins/shared_preferences/ios`)
 
+SPEC REPOS:
+  trunk:
+    - Reachability
+
 EXTERNAL SOURCES:
+  connectivity:
+    :path: Pods/.symlinks/plugins/connectivity/ios
+  connectivity_macos:
+    :path: Pods/.symlinks/plugins/connectivity_macos/ios
   Flutter:
     :path: Pods/.symlinks/flutter/ios
+  path_provider:
+    :path: Pods/.symlinks/plugins/path_provider/ios
+  path_provider_macos:
+    :path: Pods/.symlinks/plugins/path_provider_macos/ios
   shared_preferences:
     :path: Pods/.symlinks/plugins/shared_preferences/ios
 
 SPEC CHECKSUMS:
-  Flutter: 9d0fac939486c9aba2809b7982dfdbb47a7b0296
-  shared_preferences: 5a1d487c427ee18fcd3ea1f2a131569481834b53
+  connectivity: c4130b2985d4ef6fd26f9702e886bd5260681467
+  connectivity_macos: e2e9731b6b22dda39eb1b128f6969d574460e191
+  Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
+  path_provider: abfe2b5c733d04e238b0d8691db0cfd63a27a93c
+  path_provider_macos: f760a3c5b04357c380e2fddb6f9db6f3015897e0
+  Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
+  shared_preferences: 1feebfa37bb57264736e16865e7ffae7fc99b523
 
 PODFILE CHECKSUM: 13dcf421f4da2e937a57e8ba760ed880beae536f
 
-COCOAPODS: 1.5.3
+COCOAPODS: 1.9.1
