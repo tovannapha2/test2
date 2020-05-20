@@ -4,20 +4,25 @@ import 'dart:convert';
 import 'package:amazon_cognito_identity_dart_2/cognito.dart';
 import 'package:amazon_cognito_identity_dart_2/sig_v4.dart';
 import 'package:flutter/material.dart';
+import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Setup AWS User Pool Id & Client Id settings here:
-const _awsUserPoolId = 'ap-southeast-1_xxxxxxxxx';
-const _awsClientId = 'xxxxxxxxxxxxxxxxxxxxxxxxxx';
+import 'appsync.dart';
 
-const _identityPoolId = 'ap-southeast-1:xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx';
+// Setup AWS User Pool Id & Client Id settings here:
 
 // Setup endpoints here:
-const _region = 'ap-southeast-1';
 const _endpoint =
     'https://xxxxxxxxxx.execute-api.ap-southeast-1.amazonaws.com/dev';
 
+const _awsUserPoolId = 'ap-southeast-1_z45CxWl6w';
+const _awsClientId = '428e5mkje8g0aigr0fsak2mm8n';
+
+const _identityPoolId = 'ap-southeast-1:732978c6-3960-46a8-9014-568eb70e02a7';
+
+// Setup endpoints here:
+const _region = 'ap-southeast-1';
 final userPool = CognitoUserPool(_awsUserPoolId, _awsClientId);
 
 /// Extend CognitoStorage with Shared Preferences to persist account
@@ -120,6 +125,7 @@ class UserService {
   CognitoUserSession _session;
   UserService(this._userPool);
   CognitoCredentials credentials;
+SharedPreferences _prefs;
 
   /// Initiate user session from local storage if present
   Future<bool> init() async {
@@ -243,7 +249,10 @@ class UserService {
   }
 }
 
-void main() => runApp(SecureCounterApp());
+void main() {
+  
+  runApp(SecureCounterApp());
+}
 
 class SecureCounterApp extends StatelessWidget {
   @override
@@ -268,6 +277,8 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final _userService = UserService(userPool);
+
   @override
   Widget build(BuildContext context) {
     final Size screenSize = MediaQuery.of(context).size;
@@ -345,6 +356,37 @@ class _HomePageState extends State<HomePage> {
                     MaterialPageRoute(
                         builder: (context) => SecureCounterScreen()),
                   );
+                },
+                color: Colors.blue,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+              width: screenSize.width,
+              child: RaisedButton(
+                child: Text(
+                  'Appsync',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => AppSync()),
+                  );
+                },
+                color: Colors.blue,
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(left: 20.0, right: 20.0, bottom: 20.0),
+              width: screenSize.width,
+              child: RaisedButton(
+                child: Text(
+                  'Logout',
+                  style: TextStyle(color: Colors.white),
+                ),
+                onPressed: ()async {
+                  await _userService.signOut();
                 },
                 color: Colors.blue,
               ),
@@ -662,6 +704,9 @@ class _LoginScreenState extends State<LoginScreen> {
   Future<UserService> _getValues() async {
     await _userService.init();
     _isAuthenticated = await _userService.checkAuthenticated();
+    if (_isAuthenticated){
+      await _userService.signOut();
+    }
     return _userService;
   }
 
@@ -716,9 +761,9 @@ class _LoginScreenState extends State<LoginScreen> {
         future: _getValues(),
         builder: (context, AsyncSnapshot<UserService> snapshot) {
           if (snapshot.hasData) {
-            if (_isAuthenticated) {
-              return SecureCounterScreen();
-            }
+            // if (_isAuthenticated) {
+            //   return SecureCounterScreen();
+            // }
             final Size screenSize = MediaQuery.of(context).size;
             return Scaffold(
               appBar: AppBar(
@@ -809,6 +854,7 @@ class _SecureCounterScreenState extends State<SecureCounterScreen> {
 
   Future<UserService> _getValues(BuildContext context) async {
     try {
+      
       await _userService.init();
       _isAuthenticated = await _userService.checkAuthenticated();
       if (_isAuthenticated) {
